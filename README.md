@@ -33,7 +33,7 @@ ansible-playbook -i dynamic_inventories/inventory ansible/main-play.yml
 
 Then the VMs should be configured, you can check by typin the ip in your browser
 
-This will shoe the frontend HTML
+This will show the frontend HTML
 ```
 147.228.173.127
 ```
