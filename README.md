@@ -1,41 +1,57 @@
-# ![DS Logo](../images/icon-32-ds.png) Demo 3
+# CDE - uloha - Hrkalová
 
-The aim of this demo is to show how to:
-* create and start nodes/containers programmatically
-* use [Vagrant triggers](https://www.vagrantup.com/docs/triggers)
-* how to create configuration files using a [Ruby](http://rubylearning.com/satishtalim/tutorial.html) script
+The templates of dce-iac-testing and dce-lab-projects were used.
 
-## Deployment diagram
+## 1) Start terraform 
+This will start plain VMs - due tu max nebula VMs there are set just  2 backends. It is configurable in variables.tf
 
-![Demo 3 deployment diagram](images/demo-3-deployment.png)
+ - You need to pass correct credentials for your opennebula in terraform.tfvars
 
-*Figure 1: Deployment diagram of Demo 3*
+```
+terraform init
+terraform plan
+terraform apply
+```
+Terraform init will install the needed resources
+Terraform plan will create terraform.tfstate
+ - You need to pass the id_ecdsa key (the path is just into /var/)
+Terraform apply will create the opennebula VMs
+ - You need to pass the id_ecdsa key
 
-## Running the demo
-
-Just enter `vagrant up` in the `demo-3` directory and wait until all nodes start up:
-
-![Demo 3 Startup](images/demo-3-startup.png)
-
-*Figure 2: Demo 3 Startup*
-
-With the command `docker ps` you can see what containers are currently running:
-
-![Demo 3 Running containers](images/demo-3-running.png)
-
-*Figure 3: Containers running in Docker*
-
-If everything is running (frontend and N backends), you can verify how the configured round-robin load balancing in [NGINX](https://www.nginx.com/) works. Point your browser to the frontend URL [(see Demo-2 how to access the frontend)](../demo-2#accessing-the-deployed-service). You should see the same page as in Demo-2, but with a small difference: at the bottom is an information which backend served your request. As you hit the *Reload button* on your web browser, each time the request will be served by another backend in a *round robin way*:
-
-![Demo 3 Testing with a browser](images/demo-3-browser-lb.png)
-
-*Figure 4: Verifying load balancing with a web browser*
-
- ## Cleanup
-
- If you think you've played enough with this demo, just run the `vagrant destroy -f` command.
-
----
+Then VM's should be created. When it is running longer than expected, it might get an error on remote exec, the init scripts will get timeout. It happened only twice, but I would like to add that here. But generally they are succesfully created.
 
 
+## 2) Start ansible
+This will pass the configurations of backend and frontend to plain VMs on opennebula. 
+There are 3 roles in ansible
+  - frontend - this pass the configuration of frontend (such as html cnf files) and set up the nginx
+  - backend - this pass the configuration of backend using dockerfile provided in demo-3
+  - prepare - all needed resources will be download or installed - this is the first role that is running
+
+It may take some time to pass the ssh keys to host. You may need to remove known_hosts..
+```
+cd ~.ssh
+rm known_hosts
+ssh nodeadm@147.228.173.120
+```
+And type yes to add the fingerprint
+
+```
+export ANSIBLE_HOST_KEY_CHECKING=False
+ansible-playbook -i dynamic_inventories/inventory ansible/main-play.yml 
+```
+
+Then the VMs should be configured, you can check by typing the ip in your browser
+
+## 3) Check in web browser 
+This will show the frontend HTML
+```
+147.228.173.127
+```
+This will show the nginx load balancer
+```
+http://147.228.173.127/service-api
+```
+
+Note: I tried to fully write the code in terraform but it wasnt working as I wanted.. Still some code is commente din terraform to se the diffrenet path..
 
