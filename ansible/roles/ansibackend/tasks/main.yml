@@ -1,0 +1,33 @@
+- name: Copy backend
+  copy:
+    src: ../backend/    
+    dest: /tmp/backend/
+
+- name: Copy the Python file of backend
+  copy:
+    src: ../backend/python/simple-backend.py
+    dest: /tmp/backend/python/simple-backend.py
+
+- name: Copy the Dockerfile of backend
+  copy:
+    src: ../backend/Dockerfile
+    dest: /tmp/backend/Dockerfile
+
+- name: Build the Docker image
+  docker_image:
+    path: /tmp/backend
+    name: "backend"
+    source: build
+    tag: v1
+    force: yes
+  become: true
+
+
+- name: Run Docker container
+  docker_container:
+    name: backend_container
+    image: backend:v1
+    state: started
+    ports:
+      "5000:5000"
+

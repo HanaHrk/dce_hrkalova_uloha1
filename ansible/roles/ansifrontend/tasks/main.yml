@@ -1,0 +1,53 @@
+- name: Copy frontend
+  copy:
+    src: ../frontend/ 
+    dest: /tmp/frontend/
+  notify: nginx restart
+
+
+#- name: Build the Docker image
+#  docker_image:
+#    path: /tmp/frontend
+#    name: "frontend"
+#    source: build
+#    tag: v1
+#    force: yes
+#  become: true
+#  notify: nginx restart
+
+
+
+#- name: Run Docker container
+#  docker_container:
+#    name: frontend_container
+#    image: frontend:v1
+#    state: started
+#    ports:
+#      "80:80"
+#  become: true
+
+
+
+
+- name: set nginx configuration
+  copy:
+    src: ../frontend/nginx/default
+    dest: /etc/nginx/sites-available/default
+  notify: nginx restart
+
+- name: set nginx configuration 2
+  copy:
+    src: ../frontend/config/backend-proxy.conf
+    dest: /etc/nginx/default.d/backend-proxy.conf
+  notify: nginx restart  
+
+- name: set nginx configuration 3
+  copy:
+    src: ../frontend/config/backend-upstream.conf
+    dest: /etc/nginx/conf.d/backend-upstream.conf
+  notify: nginx restart 
+
+
+- name: start nginx
+  become: true
+  shell: nginx -t 

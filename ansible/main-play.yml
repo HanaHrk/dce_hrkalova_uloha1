@@ -1,0 +1,15 @@
+---
+
+  - name: Setup backend
+    hosts: backend_vm_templates
+    become: true
+    roles:
+      - ansibackend
+
+  - name: Setup frontend
+    hosts: frontend_vm_template
+    become: true
+    roles:
+      - ansifrontend
+
+      

@@ -1,0 +1,12 @@
+[frontend_vm_template]
+%{ for ip in frontend_vm_template ~}
+${ip}
+%{ endfor ~}
+
+[backend_vm_templates]
+%{ for ip in backend_vm_templates ~}
+${ip}
+%{ endfor ~}
+
+[all:vars]
+ansible_user=${vm_admin_user}

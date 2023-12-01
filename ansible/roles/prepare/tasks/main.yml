@@ -1,0 +1,74 @@
+- name: Install necessary system packages
+  apt:
+    name: ['gnupg','apt-transport-https','ca-certificates','curl','software-properties-common']
+    state: present
+  become: yes
+
+- name: Install Python with PIP
+  apt:
+    pkg:
+      - python3
+      - python3-pip
+
+- name: Prepare directory for key
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: 0755
+
+- name: Download Docker's GPG key and save it to a file
+  shell: |
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor > /etc/apt/keyrings/docker.gpg
+
+- name: Add Docker's repository to the list of apt sources
+  shell: |
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+- name: Update the package index
+  apt:
+    update_cache: yes
+
+- name: Install docker
+  apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+  become: yes
+
+- name: Add admin user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+
+
+- name: Install Python Docker & Docker Compose modules
+  pip:
+    name:
+      - docker
+      - docker-compose
+
+#- name: Ensure nginx is installed
+#  apt:
+#    name: nginx
+#    state: present
+#    update_cache: yes
+
+#- name: Install Packages
+#  apt:
+#    name: "{{ item }}"
+#    state: latest
+#  with_items:
+#    - nginx
+#    - nginx-core
+#    - nginx-full
+
+- name: Ensure Nginx default directory exists
+  ansible.builtin.file:
+    path: /etc/nginx/default.d
+    state: directory
+    mode: '0755'
