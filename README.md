@@ -30,11 +30,18 @@ There are 3 roles in ansible
 
 It may take some time to pass the ssh keys to host. You may need to remove known_hosts..
 ```
+cd ~.ssh
+rm known_hosts
+ssh nodeadm@147.228.173.120
+```
+And type yes to add the fingerprint
+
+```
 export ANSIBLE_HOST_KEY_CHECKING=False
 ansible-playbook -i dynamic_inventories/inventory ansible/main-play.yml 
 ```
 
-Then the VMs should be configured, you can check by typin the ip in your browser
+Then the VMs should be configured, you can check by typing the ip in your browser
 
 ## 3) Check in web browser 
 This will show the frontend HTML
