@@ -20,6 +20,7 @@ Terraform apply will create the opennebula VMs
 
 Then VM's should be created. When it is running longer than expected, it might get an error on remote exec, the init scripts will get timeout. It happened only twice, but I would like to add that here. But generally they are succesfully created.
 
+It may take some time to pass the ssh keys to host.
 ## 2) Start ansible
 This will pass the configurations of backend and frontend to plain VMs on opennebula. 
 There are 3 roles in ansible
