@@ -5,6 +5,7 @@
   notify: nginx restart
 
 
+
 #- name: Build the Docker image
 #  docker_image:
 #    path: /tmp/frontend
@@ -26,7 +27,17 @@
 #      "80:80"
 #  become: true
 
+- name: Ensure Nginx default directory exists
+  ansible.builtin.file:
+    path: /etc/nginx/sites-available
+    state: directory
+    mode: '0755'
 
+- name: Ensure Nginx default directory exists
+  ansible.builtin.file:
+    path: /etc/nginx/conf.d
+    state: directory
+    mode: '0755'
 
 
 - name: set nginx configuration

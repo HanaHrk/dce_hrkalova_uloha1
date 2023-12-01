@@ -4,6 +4,16 @@
     state: present
   become: yes
 
+- name: Killall apt
+  become: true
+  shell: sudo killall apt apt-get
+  ignore_errors: true
+
+- name: Killall apt 2
+  become: true
+  shell: sudo dpkg --configure -a
+  ignore_errors: true
+
 - name: Install Python with PIP
   apt:
     pkg:
@@ -38,7 +48,7 @@
       - docker-compose-plugin
   become: yes
 
-- name: Add admin user to docker group
+- name: Add user
   user:
     name: "{{ ansible_user }}"
     groups: docker
@@ -46,7 +56,7 @@
 
 
 
-- name: Install Python Docker & Docker Compose modules
+- name: Install docker
   pip:
     name:
       - docker

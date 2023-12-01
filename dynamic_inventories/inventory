@@ -1,9 +1,9 @@
 [frontend_vm_template]
-147.228.173.127
+147.228.173.120
 
 [backend_vm_templates]
-147.228.173.124
-147.228.173.126
+147.228.173.97
+147.228.173.96
 
 [all:vars]
 ansible_user=nodeadm
