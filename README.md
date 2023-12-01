@@ -3,8 +3,9 @@
 The templates of dce-iac-testing and dce-lab-projects were used.
 
 ## 1) Start terraform 
-This will start plain VMs - due tu max nebula VMs there are set just a 2 backends. It is configurable in variables.tf
-You need to pass correct credentials for your opennebula in terraform.tfvars
+This will start plain VMs - due tu max nebula VMs there are set just  2 backends. It is configurable in variables.tf
+
+ - You need to pass correct credentials for your opennebula in terraform.tfvars
 
 ```
 terraform init
