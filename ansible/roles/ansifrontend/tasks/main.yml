@@ -4,9 +4,21 @@
     dest: /tmp/frontend/
   notify: nginx restart
 
+#- name: start nginx 1
+#  become: true
+#  shell: sudo apt-get remove --purge nginx*
+
+#- name: start nginx 2
+#  become: true
+#  shell: sudo apt-get autoremove
+
+#- name: start nginx 3
+#  become: true
+#  shell: sudo apt-get autoclean
 
 - name: install nginx
   apt: name=nginx state=present
+
 #- name: Build the Docker image
 #  docker_image:
 #    path: /tmp/frontend
