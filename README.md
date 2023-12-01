@@ -43,3 +43,6 @@ This will show the nginx load balancer
 ```
 http://147.228.173.127/service-api
 ```
+
+Note: I tried to fully write the code in terraform but it wasnt working as I wanted.. Still some code is commente din terraform to se the diffrenet path..
+
